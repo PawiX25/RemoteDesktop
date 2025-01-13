@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ScreenPeer</title>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-white min-h-screen">
+    <div id="modeSelect" class="fixed inset-0 flex items-center justify-center bg-gray-900 z-50">
+        <div class="flex gap-8">
+            <button onclick="selectMode('host')" class="p-8 bg-blue-600 hover:bg-blue-700 rounded-xl transition-all hover:scale-105">
+                <svg class="w-16 h-16 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span class="block text-xl font-bold">Host Screen</span>
+            </button>
+            <button onclick="selectMode('client')" class="p-8 bg-purple-600 hover:bg-purple-700 rounded-xl transition-all hover:scale-105">
+                <svg class="w-16 h-16 mb-4 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <span class="block text-xl font-bold">View Screen</span>
+            </button>
+        </div>
+    </div>
+    <div class="container mx-auto p-6">
+        <div class="max-w-6xl mx-auto">
+            <header class="mb-8 flex items-center justify-between">
+                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-600">ScreenPeer</h1>
+                <div id="connectionStatus" class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-gray-500"></span>
+                    <span class="text-sm text-gray-400">Disconnected</span>
+                </div>
+            </header>
+            <div id="controls" class="bg-gray-800/50 backdrop-blur-sm p-6 rounded-xl shadow-lg mb-6">
+                <div id="hostControls" class="hidden space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <button id="shareScreenBtn" class="px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                Share Screen
+                            </button>
+                        </div>
+                        <div id="myPeerId" class="bg-gray-900/50 px-4 py-2 rounded-lg text-sm font-mono"></div>
+                    </div>
+                </div>
+                <div id="clientControls" class="hidden space-y-4">
+                    <div class="flex gap-4">
+                        <input type="text" id="peerIdInput" placeholder="Enter Host ID" 
+                               class="flex-1 px-4 py-3 rounded-lg bg-gray-900/50 border border-gray-700 focus:outline-none focus:border-purple-500">
+                        <button id="connectBtn" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                            Connect
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="relative aspect-video rounded-xl overflow-hidden bg-gray-800/50 backdrop-blur-sm">
+                <video id="remoteVideo" autoplay playsinline class="w-full h-full object-contain"></video>
+                <div id="noStreamMessage" class="absolute inset-0 flex items-center justify-center">
+                    <div class="text-center">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                        </svg>
+                        <p class="text-gray-500 text-lg">No active stream</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
