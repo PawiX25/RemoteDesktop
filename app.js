@@ -11,6 +11,12 @@ const hostControls = document.getElementById('hostControls');
 const clientControls = document.getElementById('clientControls');
 const modeSelect = document.getElementById('modeSelect');
 
+const qualitySettings = {
+    high: { width: 1920, height: 1080, frameRate: 30 },
+    medium: { width: 1280, height: 720, frameRate: 25 },
+    low: { width: 854, height: 480, frameRate: 15 }
+};
+
 function selectMode(mode) {
     currentMode = mode;
     modeSelect.style.display = 'none';
@@ -66,10 +72,17 @@ shareScreenBtn.addEventListener('click', async () => {
         shareScreenBtn.disabled = true;
         shareScreenBtn.innerHTML = 'Sharing...';
         
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: true,
+        const quality = document.getElementById('qualitySelect').value;
+        const displayMediaOptions = {
+            video: {
+                ...qualitySettings[quality],
+                displaySurface: 'monitor',
+                cursor: 'always'
+            },
             audio: true
-        });
+        };
+        
+        const stream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
         
         stream.getVideoTracks()[0].onended = () => {
             shareScreenBtn.disabled = false;
